@@ -2,10 +2,7 @@ import json
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import HttpResponse
-try:
-    from django.utils.encoding import force_unicode as force_text  # Django < 1.5
-except ImportError as e:
-    from django.utils.encoding import force_text  # Django 1.5 / python3
+from django.utils.encoding import force_str
 from django.utils.functional import Promise
 from django.utils.cache import add_never_cache_headers
 from django.views.generic.base import TemplateView
@@ -19,7 +16,7 @@ class LazyEncoder(DjangoJSONEncoder):
     """
     def default(self, obj):
         if isinstance(obj, Promise):
-            return force_text(obj)
+            return force_str(obj)
         return super(LazyEncoder, self).default(obj)
 
 
